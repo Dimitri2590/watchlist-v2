@@ -1,0 +1,110 @@
+.film-list-container {
+    margin-top: 2rem;
+}
+
+.film-list {
+    list-style: none;
+    padding: 0;
+}
+
+.film-list-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f9f9f9;
+}
+
+.film-title {
+    color: #333;
+}
+
+.film-resume,
+.film-priority {
+    color: #333;
+}
+
+.film-btn {
+    background-color: #7f00ff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.film-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.film-modal {
+    background-color: #454545;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+}
+
+.film-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.film-modal-close {
+    background-color: #7f00ff;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+}
+
+.film-modal-form-group {
+    margin-bottom: 15px;
+}
+
+.film-modal-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.film-modal-input,
+.film-modal-textarea,
+.film-modal-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.film-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.film-modal-action-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    background-color: #7f00ff;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.film-modal-action-btn:last-child {
+    margin-right: 0;
+}
