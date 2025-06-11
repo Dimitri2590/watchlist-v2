@@ -15,7 +15,7 @@ export default function FilmList({ refresh }) {
         .order('priorite', { ascending: true })
 
       if (error) {
-        console.error('Erreur de récupération :', error.message)
+        console.error('Erreurs de récupérations :', error.message)
       } else {
         setFilms(data)
       }
@@ -27,7 +27,7 @@ export default function FilmList({ refresh }) {
   const handleDelete = async (id) => {
     const { error } = await supabase.from('films').delete().eq('id', id)
     if (error) {
-      console.error('Erreur de suppression :', error.message)
+      console.error('Erreurs de suppressions :', error.message)
     } else {
       setFilms(films.filter(film => film.id !== id))
     }
