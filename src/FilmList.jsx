@@ -52,11 +52,44 @@ export default function FilmList({ refresh }) {
     setUpdatedFilmData({ ...updatedFilmData, [name]: value })
   }
 
+  const [searchTitle, setSearchTitle] = useState("");
+  const [searchType, setSearchType] = useState("");
+  const [searchPriority, setSearchPriority] = useState ("");
+
+  const filteredFilms = films.filter((film) => {
+    const matchTitle = film.titre.toLowerCase().includes(searchTitle.toLowerCase());
+    const matchType = film.type.toLowerCase().includes(searchType.toLowerCase());
+    const matchPriority = film.priorite.toString().includes(searchPriority);
+    return matchTitle && matchType && matchPriority;
+  });
+
+
   return (
       <div className="film-list-container">
         <h2>🎬 Films à voir</h2>
         <ul className="film-list">
-          {films.map((film) => (
+          <input
+              type="text"
+              placeholder="Rechercher par nom"
+              value={searchTitle}
+              onChange={(e) => setSearchTitle(e.target.value)}
+          />
+          <input
+              type="text"
+              placeholder="Rechercher par genre"
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+          />
+          <select
+              value={searchPriority}
+              onChange={(e) => setSearchPriority(e.target.value)}
+          >
+            <option value="">Toutes les priorités</option>
+            <option value="1">1 : J'ai très envie de voir ce film</option>
+            <option value="2">2 : le film a l'air intéressant</option>
+            <option value="3">3 : Pourquoi pas</option>
+          </select>
+          {filteredFilms.map((film) => (
               <li key={film.id} className="film-list-item">
                 <h3 className="film-title">
                   {film.titre} <small>({film.type})</small>
@@ -64,7 +97,10 @@ export default function FilmList({ refresh }) {
                 <p className="film-resume">{film.resume}</p>
                 <p className="film-priority"><strong>Priorité : {film.priorite}</strong></p>
                 <button className="film-btn" onClick={() => handleDelete(film.id)}>Supprimer</button>
-                <button className="film-btn" onClick={() => { setEditingFilm(film); setUpdatedFilmData(film); }}>Modifier</button>
+                <button className="film-btn" onClick={() => {
+                  setEditingFilm(film);
+                  setUpdatedFilmData(film);
+                }}>Modifier</button>
               </li>
           ))}
         </ul>
