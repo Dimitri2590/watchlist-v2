@@ -87,8 +87,6 @@ const Login = () => {
             if (error) {
                 setError(error.message);
             }
-        } catch (err) {
-            setError('Une erreur est survenue lors de la connexion');
         } finally {
             setLoading(false);
         }
@@ -108,49 +106,49 @@ const Login = () => {
                             {error}
                         </div>
                     )}
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
-                            <label htmlFor="email" className="sr-only">
-                                Email
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                required
-                                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                placeholder="Adresse email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                    <form onSubmit={handleSubmit}>
+                        <div className="rounded-md shadow-sm -space-y-px">
+                            <div>
+                                <label htmlFor="email" className="sr-only">
+                                    Email
+                                </label>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    required
+                                    className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    placeholder="Adresse email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="password" className="sr-only">
+                                    Mot de passe
+                                </label>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    required
+                                    className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    placeholder="Mot de passe"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
                         </div>
                         <div>
-                            <label htmlFor="password" className="sr-only">
-                                Mot de passe
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                placeholder="Mot de passe"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                            >
+                                {loading ? 'Connexion...' : 'Se connecter'}
+                            </button>
                         </div>
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            onClick={handleSubmit}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-                        >
-                            {loading ? 'Connexion...' : 'Se connecter'}
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -159,7 +157,7 @@ const Login = () => {
 
 // Barre de navigation avec déconnexion
 const Navbar = () => {
-    const { user, signOut } = useAuth();
+    const {  signOut } = useAuth();
 
     const handleSignOut = async () => {
         await signOut();

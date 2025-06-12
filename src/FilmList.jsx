@@ -111,7 +111,7 @@ export default function FilmList({ refresh }) {
                   <h5>Modifier le film</h5>
                   <button type="button" className="film-modal-close" onClick={() => setEditingFilm(null)}>&times;</button>
                 </div>
-                <form>
+                <form onSubmit={(e) => { e.preventDefault(); handleUpdate(editingFilm.id); }}>
                   <div className="film-modal-form-group">
                     <label htmlFor="titre" className="film-modal-label">Titre</label>
                     <input type="text" className="film-modal-input" id="titre" name="titre" value={updatedFilmData.titre} onChange={handleInputChange} />
@@ -132,14 +132,15 @@ export default function FilmList({ refresh }) {
                       <option value="3">3 : Pourquoi pas</option>
                     </select>
                   </div>
+                  <div className="film-modal-actions">
+                    <button type="button" className="film-modal-action-btn" onClick={() => setEditingFilm(null)}>Annuler</button>
+                    <button type="submit" className="film-modal-action-btn">Enregistrer</button>
+                  </div>
                 </form>
-                <div className="film-modal-actions">
-                  <button type="button" className="film-modal-action-btn" onClick={() => setEditingFilm(null)}>Annuler</button>
-                  <button type="button" className="film-modal-action-btn" onClick={() => handleUpdate(editingFilm.id)}>Enregistrer</button>
-                </div>
               </div>
             </div>
         )}
       </div>
+
   )
 }
