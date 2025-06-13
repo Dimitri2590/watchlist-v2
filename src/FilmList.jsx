@@ -24,13 +24,31 @@ export default function FilmList({ refresh }) {
     fetchFilms()
   }, [refresh])
 
-  const handleDelete = async (id) => {
+  /*const handleDelete = async (id) => {
     const { error } = await supabase.from('films').delete().eq('id', id)
     if (error) {
       console.error('Erreurs de suppressions :', error.message)
     } else {
       setFilms(films.filter(film => film.id !== id))
     }
+  }
+  */
+
+
+
+  const handleValidate = async (id) => {
+      const { error } = await supabase
+          .from ('films')
+          .update({ vu : true})
+          .eq('id', id);
+
+      if (error) {
+          console.error('Erreur de validation : ', error.message);
+      } else {
+          setFilms(films.map(film =>
+          film.id === id ? {...film, vu: true} : film
+          ));
+      }
   }
 
   const handleUpdate = async (id) => {
@@ -56,7 +74,9 @@ export default function FilmList({ refresh }) {
   const [searchType, setSearchType] = useState("");
   const [searchPriority, setSearchPriority] = useState ("");
 
-  const filteredFilms = films.filter((film) => {
+  const filteredFilms = films
+      .filter(film => !film.vu)
+      .filter((film) => {
     const matchTitle = film.titre.toLowerCase().includes(searchTitle.toLowerCase());
     const matchType = film.type.toLowerCase().includes(searchType.toLowerCase());
     const matchPriority = film.priorite.toString().includes(searchPriority);
@@ -96,7 +116,7 @@ export default function FilmList({ refresh }) {
                 </h3>
                 <p className="film-resume">{film.resume}</p>
                 <p className="film-priority"><strong>Priorité : {film.priorite}</strong></p>
-                <button className="film-btn" onClick={() => handleDelete(film.id)}>Supprimer</button>
+                <button className="film-btn" onClick={() => handleValidate(film.id)}>Film vu</button>
                 <button className="film-btn" onClick={() => {
                   setEditingFilm(film);
                   setUpdatedFilmData(film);
@@ -142,5 +162,5 @@ export default function FilmList({ refresh }) {
         )}
       </div>
 
-  )
+  );
 }

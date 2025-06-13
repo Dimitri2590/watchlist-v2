@@ -189,6 +189,7 @@ const MainApp = () => {
         <div>
             <Navbar />
             <div className="page-center">
+                <title>Watchlist</title>
                 <h1>Ma Watchlist 🎥</h1>
                 <AddFilmForm onAdd={handleRefresh} />
                 <FilmList refresh={refresh} />
@@ -225,6 +226,7 @@ function App() {
             <div className="App">
                 <ProtectedRoute>
                     <MainApp />
+                    <navbar />
                 </ProtectedRoute>
             </div>
         </AuthProvider>
