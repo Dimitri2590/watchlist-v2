@@ -70,6 +70,8 @@ export default function FilmList({ refresh }) {
     setUpdatedFilmData({ ...updatedFilmData, [name]: value })
   }
 
+  const allGenres = Array.from(new Set(films.flatMap(film => [film.type, film.type2]))).filter(Boolean);
+
   const [searchTitle, setSearchTitle] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchPriority, setSearchPriority] = useState ("");
@@ -78,7 +80,7 @@ export default function FilmList({ refresh }) {
       .filter(film => !film.vu)
       .filter((film) => {
     const matchTitle = film.titre.toLowerCase().includes(searchTitle.toLowerCase());
-    const matchType = film.type.toLowerCase().includes(searchType.toLowerCase());
+    const matchType = searchType ? film.type === searchType || film.type2 === searchType : true;
     const matchPriority = film.priorite.toString().includes(searchPriority);
     return matchTitle && matchType && matchPriority;
   });
@@ -94,12 +96,15 @@ export default function FilmList({ refresh }) {
               value={searchTitle}
               onChange={(e) => setSearchTitle(e.target.value)}
           />
-          <input
-              type="text"
-              placeholder="Rechercher par genre"
+          <select
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
-          />
+          >
+            <option value ="">Rechercher par genre</option>
+            {allGenres.map((genre) => (
+                <option key={genre} value={genre}>{genre}</option>
+            ))}
+          </select>
           <select
               value={searchPriority}
               onChange={(e) => setSearchPriority(e.target.value)}
@@ -112,7 +117,7 @@ export default function FilmList({ refresh }) {
           {filteredFilms.map((film) => (
               <li key={film.id} className="film-list-item">
                 <h3 className="film-title">
-                  {film.titre} <small>({film.type})</small>
+                  {film.titre} <small>({[film.type, film.type2].filter(Boolean).join(', ')})</small>
                 </h3>
                 <p className="film-resume">{film.resume}</p>
                 <p className="film-priority"><strong>Priorité : {film.priorite}</strong></p>

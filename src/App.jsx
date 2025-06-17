@@ -166,6 +166,7 @@ const Navbar = () => {
     return (
         <div className="flex justify-end items-center p-4">
             <div className="flex items-center space-x-4">
+                <link rel={"icon"} href="./assets/logo-site-watchlist.jpg" />
                 <button
                     onClick={handleSignOut}
                     className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm transition-colors"

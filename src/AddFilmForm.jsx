@@ -5,7 +5,7 @@ import './index.css';
 
 const validationSchema = Yup.object().shape({
   titre: Yup.string().required('Le titre est requis'),
-  type: Yup.string().required('Le type est requis'),
+  typeInput: Yup.string().required('Le type est requis'),
   resume: Yup.string().required('Le résumé est requis'),
   priorite: Yup.number().required('La priorité est requise'),
 });
@@ -14,13 +14,25 @@ export default function AddFilmForm({ onAdd }) {
   const formik = useFormik({
     initialValues: {
       titre: '',
-      type: '',
+      typeInput: '',
       resume: '',
       priorite: 1,
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      const { error } = await supabase.from('films').insert([values]);
+      const genres = values.typeInput.split(',').map(g => g.trim());
+      const genre1 = genres[0] || null;
+      const genre2 = genres[1] || null;
+
+      const filmData = {
+        titre: values.titre,
+        type: genre1,
+        type2: genre2,
+        resume: values.resume,
+        priorite: values.priorite,
+      };
+
+      const { error } = await supabase.from('films').insert([filmData]);
 
       if (error) {
         alert('Erreur : ' + error.message);
@@ -51,19 +63,19 @@ export default function AddFilmForm({ onAdd }) {
             ) : null}
           </div>
           <div className="mb-5">
-            <label htmlFor="type" className="block text-sm font-medium text-gray-700">Type</label>
+            <label htmlFor="typeInput" className="block text-sm font-medium text-gray-700">Genres</label>
             <input
-                id="type"
-                name="type"
+                id="typeInput"
+                name="typeInput"
                 type="text"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.type}
-                placeholder="Type"
+                value={formik.values.typeInput}
+                placeholder="Genre(s) (séparés par des virgules)"
                 className="w-full mt-1 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {formik.touched.type && formik.errors.type ? (
-                <div className="text-red-500 text-xs mt-1">{formik.errors.type}</div>
+            {formik.touched.typeInput && formik.errors.typeInput ? (
+                <div className="text-red-500 text-xs mt-1">{formik.errors.typeInput}</div>
             ) : null}
           </div>
           <div className="mb-5">
