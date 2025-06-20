@@ -77,7 +77,6 @@ export default function FilmList({ refresh }) {
   const [searchPriority, setSearchPriority] = useState ("");
 
   const filteredFilms = films
-      .filter(film => !film.vu)
       .filter((film) => {
     const matchTitle = film.titre.toLowerCase().includes(searchTitle.toLowerCase());
     const matchType = searchType ? film.type === searchType || film.type2 === searchType : true;
@@ -113,20 +112,32 @@ export default function FilmList({ refresh }) {
             <option value="1">1 : J'ai très envie de voir ce film</option>
             <option value="2">2 : le film a l'air intéressant</option>
             <option value="3">3 : Pourquoi pas</option>
+
           </select>
           {filteredFilms.map((film) => (
               <li key={film.id} className="film-list-item">
-                <h3 className="film-title">
-                  {film.titre} <small>({[film.type, film.type2].filter(Boolean).join(', ')})</small>
-                </h3>
-                <p className="film-resume">{film.resume}</p>
-                <p className="film-priority"><strong>Priorité : {film.priorite}</strong></p>
-                <button className="film-btn" onClick={() => handleValidate(film.id)}>Film vu</button>
-                <button className="film-btn" onClick={() => {
-                  setEditingFilm(film);
-                  setUpdatedFilmData(film);
-                }}>Modifier</button>
+                <div className="film-item-flex">
+                  <img src="src/assets/test.jpg" alt="test" className="film-image" />
+
+                  <div className="film-content">
+                    <h3 className="film-title">
+                      {film.titre}
+                      <small>({[film.type, film.type2].filter(Boolean).join(', ')})</small>
+                    </h3>
+                    <p className="film-resume">{film.resume}</p>
+                    <p className="film-priority"><strong>Priorité : {film.priorite}</strong></p>
+                    <div className="film-buttons">
+                      <button className="film-btn" onClick={() => handleValidate(film.id)}>Film vu</button>
+                      <button className="film-btn" onClick={() => {
+                        setEditingFilm(film);
+                        setUpdatedFilmData(film);
+                      }}>Modifier</button>
+                    </div>
+                  </div>
+                </div>
               </li>
+
+
           ))}
         </ul>
         {editingFilm && (

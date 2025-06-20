@@ -3,6 +3,7 @@ import AddFilmForm from './AddFilmForm';
 import FilmList from './FilmList';
 import { supabase } from './supabaseClient.js'; // Importez votre config existante
 
+
 // Contexte d'authentification
 const AuthContext = createContext({});
 
@@ -227,7 +228,6 @@ function App() {
             <div className="App">
                 <ProtectedRoute>
                     <MainApp />
-                    <navbar />
                 </ProtectedRoute>
             </div>
         </AuthProvider>
