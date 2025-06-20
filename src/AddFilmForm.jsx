@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { supabase } from './supabaseClient';
 import './index.css';
+import {useState} from "react";
 
 const validationSchema = Yup.object().shape({
   titre: Yup.string().required('Le titre est requis'),
@@ -11,6 +12,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function AddFilmForm({ onAdd }) {
+  const [imageFile, setImageFile] = useState(null);
   const formik = useFormik({
     initialValues: {
       titre: '',
@@ -24,12 +26,34 @@ export default function AddFilmForm({ onAdd }) {
       const genre1 = genres[0] || null;
       const genre2 = genres[1] || null;
 
+      let imageUrl = null;
+
+      if (imageFile) {
+        const {data, error} = await supabase
+            .storage
+            .from('films-poster')
+            .upload(`films/${Date.now()}_${imageFile.name}`, imageFile);
+
+        if (error) {
+          alert("Erreur d'upload de l'image : " + error.message);
+          return;
+        }
+
+        const { data: publicUrlData } = supabase
+            .storage
+            .from('film-images')
+            .getPublicUrl(data.path);
+
+        imageUrl = publicUrlData.publicUrl;
+      }
+
       const filmData = {
         titre: values.titre,
         type: genre1,
         type2: genre2,
         resume: values.resume,
         priorite: values.priorite,
+        image_url: imageUrl,
       };
 
       const { error } = await supabase.from('films').insert([filmData]);
@@ -110,6 +134,17 @@ export default function AddFilmForm({ onAdd }) {
             {formik.touched.priorite && formik.errors.priorite ? (
                 <div className="text-red-500 text-xs mt-1">{formik.errors.priorite}</div>
             ) : null}
+          </div>
+          <div className="mb-5">
+            <label htmlFor={"image"} className="block text-sm font-medium text-gray-700">Image</label>
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0])}
+              className="w-full mt-1 border border-gray-300 p-2 rounded-md bg-white"
+              />
           </div>
           <button
               type="submit"

@@ -10,13 +10,14 @@ export default function FilmList({ refresh }) {
   useEffect(() => {
     const fetchFilms = async () => {
       const { data, error } = await supabase
-        .from('films')
-        .select('*')
-        .order('priorite', { ascending: true })
+          .from('films')
+          .select('*')
+          .order('priorite', { ascending: true })
 
       if (error) {
         console.error('Erreurs de récupérations :', error.message)
       } else {
+        // Pas besoin de créer signed URL ici, on utilise image_url directement
         setFilms(data)
       }
     }
@@ -24,38 +25,24 @@ export default function FilmList({ refresh }) {
     fetchFilms()
   }, [refresh])
 
-  /*const handleDelete = async (id) => {
-    const { error } = await supabase.from('films').delete().eq('id', id)
-    if (error) {
-      console.error('Erreurs de suppressions :', error.message)
-    } else {
-      setFilms(films.filter(film => film.id !== id))
-    }
-  }
-  */
-
-
-
   const handleValidate = async (id) => {
-      const { error } = await supabase
-          .from ('films')
-          .update({ vu : true})
-          .eq('id', id);
+    const { error } = await supabase
+        .from('films')
+        .update({ vu: true })
+        .eq('id', id)
 
-      if (error) {
-          console.error('Erreur de validation : ', error.message);
-      } else {
-          setFilms(films.map(film =>
-          film.id === id ? {...film, vu: true} : film
-          ));
-      }
+    if (error) {
+      console.error('Erreur de validation : ', error.message)
+    } else {
+      setFilms(films.map(film => film.id === id ? { ...film, vu: true } : film))
+    }
   }
 
   const handleUpdate = async (id) => {
     const { error } = await supabase
-      .from('films')
-      .update(updatedFilmData)
-      .eq('id', id)
+        .from('films')
+        .update(updatedFilmData)
+        .eq('id', id)
 
     if (error) {
       console.error('Erreur de mise à jour :', error.message)
@@ -70,20 +57,41 @@ export default function FilmList({ refresh }) {
     setUpdatedFilmData({ ...updatedFilmData, [name]: value })
   }
 
-  const allGenres = Array.from(new Set(films.flatMap(film => [film.type, film.type2]))).filter(Boolean);
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const [searchTitle, setSearchTitle] = useState("");
-  const [searchType, setSearchType] = useState("");
-  const [searchPriority, setSearchPriority] = useState ("");
+    const fileName = `${Date.now()}_${file.name}`;
+    const filePath = `films/${fileName}`;
 
-  const filteredFilms = films
-      .filter((film) => {
-    const matchTitle = film.titre.toLowerCase().includes(searchTitle.toLowerCase());
-    const matchType = searchType ? film.type === searchType || film.type2 === searchType : true;
-    const matchPriority = film.priorite.toString().includes(searchPriority);
-    return matchTitle && matchType && matchPriority;
-  });
+    const { error } = await supabase.storage
+        .from('films-poster')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
 
+    if (error) {
+      console.error('Erreur upload image :', error.message);
+    } else {
+      const publicUrl = `https://qtdezvbginizovlzgtdn.supabase.co/storage/v1/object/public/films-poster/${filePath}`;
+      setUpdatedFilmData(prev => ({ ...prev, image_url: publicUrl }));
+    }
+  };
+
+
+  const allGenres = Array.from(new Set(films.flatMap(film => [film.type, film.type2]))).filter(Boolean)
+
+  const [searchTitle, setSearchTitle] = useState("")
+  const [searchType, setSearchType] = useState("")
+  const [searchPriority, setSearchPriority] = useState("")
+
+  const filteredFilms = films.filter((film) => {
+    const matchTitle = film.titre.toLowerCase().includes(searchTitle.toLowerCase())
+    const matchType = searchType ? film.type === searchType || film.type2 === searchType : true
+    const matchPriority = film.priorite.toString().includes(searchPriority)
+    return matchTitle && matchType && matchPriority
+  })
 
   return (
       <div className="film-list-container">
@@ -99,7 +107,7 @@ export default function FilmList({ refresh }) {
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
           >
-            <option value ="">Rechercher par genre</option>
+            <option value="">Rechercher par genre</option>
             {allGenres.map((genre) => (
                 <option key={genre} value={genre}>{genre}</option>
             ))}
@@ -112,12 +120,21 @@ export default function FilmList({ refresh }) {
             <option value="1">1 : J'ai très envie de voir ce film</option>
             <option value="2">2 : le film a l'air intéressant</option>
             <option value="3">3 : Pourquoi pas</option>
-
           </select>
+
           {filteredFilms.map((film) => (
               <li key={film.id} className="film-list-item">
                 <div className="film-item-flex">
-                  <img src="src/assets/test.jpg" alt="test" className="film-image" />
+                  {film.image_url && (
+                      <img
+                          src={film.image_url}
+                          alt={film.titre}
+                          className="film-image"
+                          onError={(e) => {
+                            e.target.src = 'https://via.placeholder.com/150?text=Image+absente'
+                          }}
+                      />
+                  )}
 
                   <div className="film-content">
                     <h3 className="film-title">
@@ -129,17 +146,16 @@ export default function FilmList({ refresh }) {
                     <div className="film-buttons">
                       <button className="film-btn" onClick={() => handleValidate(film.id)}>Film vu</button>
                       <button className="film-btn" onClick={() => {
-                        setEditingFilm(film);
-                        setUpdatedFilmData(film);
+                        setEditingFilm(film)
+                        setUpdatedFilmData(film)
                       }}>Modifier</button>
                     </div>
                   </div>
                 </div>
               </li>
-
-
           ))}
         </ul>
+
         {editingFilm && (
             <div className="film-modal-overlay">
               <div className="film-modal">
@@ -147,7 +163,7 @@ export default function FilmList({ refresh }) {
                   <h5>Modifier le film</h5>
                   <button type="button" className="film-modal-close" onClick={() => setEditingFilm(null)}>&times;</button>
                 </div>
-                <form onSubmit={(e) => { e.preventDefault(); handleUpdate(editingFilm.id); }}>
+                <form onSubmit={(e) => { e.preventDefault(); handleUpdate(editingFilm.id) }}>
                   <div className="film-modal-form-group">
                     <label htmlFor="titre" className="film-modal-label">Titre</label>
                     <input type="text" className="film-modal-input" id="titre" name="titre" value={updatedFilmData.titre} onChange={handleInputChange} />
@@ -168,6 +184,17 @@ export default function FilmList({ refresh }) {
                       <option value="3">3 : Pourquoi pas</option>
                     </select>
                   </div>
+                  <div className="film-modal-form-group">
+                    <label htmlFor="image" className="film-modal-label">Nouvelle image</label>
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                    />
+                  </div>
+
                   <div className="film-modal-actions">
                     <button type="button" className="film-modal-action-btn" onClick={() => setEditingFilm(null)}>Annuler</button>
                     <button type="submit" className="film-modal-action-btn">Enregistrer</button>
@@ -177,6 +204,5 @@ export default function FilmList({ refresh }) {
             </div>
         )}
       </div>
-
-  );
+  )
 }
