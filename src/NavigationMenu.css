@@ -5,7 +5,8 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    background-color: #1f2937; /* gris foncé */
+    background-color: #1f2937;
+    /* gris foncé */
     padding: 1rem;
 }
 
@@ -15,7 +16,8 @@
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 6px;
-    background-color: #2563eb; /* bleu */
+    background-color: #7f00ff;
+    /* bleu */
     transition: background-color 0.2s ease;
 }
 

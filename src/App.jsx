@@ -1,7 +1,9 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import AddFilmForm from './AddFilmForm';
 import FilmList from './FilmList';
-import { supabase } from './supabaseClient.js'; // Importez votre config existante
+import FilmValide from './FilmValide';
+import { supabase } from './supabaseClient.js';
 
 
 // Contexte d'authentification
@@ -94,10 +96,10 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#1a1a1a] py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    <h2 className="mt-6 text-center text-3xl font-extrabold text-white-900">
                         Connexion à votre Watchlist
                     </h2>
                 </div>
@@ -118,7 +120,7 @@ const Login = () => {
                                     name="email"
                                     type="email"
                                     required
-                                    className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white-900 rounded-t-md focus:outline-none focus:ring-[#7f00ff] focus:border-[#7f00ff] focus:z-10 sm:text-sm"
                                     placeholder="Adresse email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -133,7 +135,7 @@ const Login = () => {
                                     name="password"
                                     type="password"
                                     required
-                                    className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white-900 rounded-b-md focus:outline-none focus:ring-[#7f00ff] focus:border-[#7f00ff] focus:z-10 sm:text-sm"
                                     placeholder="Mot de passe"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -144,7 +146,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#7f00ff] hover:bg-[#6a00d6] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7f00ff] disabled:opacity-50"
                             >
                                 {loading ? 'Connexion...' : 'Se connecter'}
                             </button>
@@ -158,24 +160,60 @@ const Login = () => {
 
 // Barre de navigation avec déconnexion
 const Navbar = () => {
-    const {  signOut } = useAuth();
+    const { signOut } = useAuth();
+    const location = useLocation();
 
     const handleSignOut = async () => {
         await signOut();
     };
 
+    const isActive = (path) => location.pathname === path;
+
     return (
-        <div className="flex justify-end items-center p-4">
-            <div className="flex items-center space-x-4">
-                <link rel={"icon"} href="./assets/logo-site-watchlist.jpg" />
-                <button
-                    onClick={handleSignOut}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm transition-colors"
-                >
-                    Déconnexion
-                </button>
+        <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200 dark:border-gray-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between h-16">
+                    <div className="flex items-center">
+                        <div className="flex-shrink-0 flex items-center gap-3 mr-8">
+                            <span className="text-2xl">🎥</span>
+                            <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Watchlist</span>
+                        </div>
+                        <div className="hidden md:block">
+                            <div className="ml-10 flex items-baseline space-x-4">
+                                <Link
+                                    to="/"
+                                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/')
+                                        ? 'bg-[#7f00ff]/10 text-[#7f00ff]'
+                                        : 'text-gray-600 dark:text-gray-300 hover:text-[#7f00ff] hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+                                >
+                                    Ma Liste
+                                </Link>
+                                <Link
+                                    to="/vus"
+                                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/vus')
+                                        ? 'bg-[#7f00ff]/10 text-[#7f00ff]'
+                                        : 'text-gray-600 dark:text-gray-300 hover:text-[#7f00ff] hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+                                >
+                                    Films Vus
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="md:hidden flex space-x-2">
+                            <Link to="/" className={`text-sm ${isActive('/') ? 'text-[#7f00ff] font-bold' : 'text-gray-500'}`}>Liste</Link>
+                            <Link to="/vus" className={`text-sm ${isActive('/vus') ? 'text-[#7f00ff] font-bold' : 'text-gray-500'}`}>Vus</Link>
+                        </div>
+                        <button
+                            onClick={handleSignOut}
+                            className="ml-4 px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors shadow-sm"
+                        >
+                            Déconnexion
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </nav>
     );
 };
 
@@ -188,14 +226,26 @@ const MainApp = () => {
     };
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-100 dark:bg-[#1a1a1a]">
             <Navbar />
-            <div className="page-center">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <title>Watchlist</title>
-                <h1>Ma Watchlist 🎥</h1>
-                <AddFilmForm onAdd={handleRefresh} />
-                <FilmList refresh={refresh} />
-            </div>
+
+                <Routes>
+                    <Route path="/" element={
+                        <div className="space-y-12">
+                            <section>
+                                <AddFilmForm onAdd={handleRefresh} />
+                            </section>
+
+                            <section>
+                                <FilmList refresh={refresh} />
+                            </section>
+                        </div>
+                    } />
+                    <Route path="/vus" element={<FilmValide />} />
+                </Routes>
+            </main>
         </div>
     );
 };
@@ -207,7 +257,7 @@ const ProtectedRoute = ({ children }) => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#7f00ff]"></div>
             </div>
         );
     }
