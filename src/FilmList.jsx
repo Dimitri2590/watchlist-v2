@@ -15,7 +15,7 @@ export default function FilmList({ refresh }) {
         .order('priorite', { ascending: true })
 
       if (error) {
-        console.error('Erreurs de récupérations :', error.message)
+        console.error('Erreur de récupération :', error.message)
       } else {
         setFilms(data)
       }
