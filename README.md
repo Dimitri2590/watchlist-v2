@@ -1,12 +1,74 @@
-# React + Vite
+# 🎥 Watchlist
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application moderne de gestion de liste de films ("To Watch List") construite avec React, Vite et Supabase.
 
-Currently, two official plugins are available:
+## 🌟 Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Authentification sécurisée** : Connexion via Email/Mot de passe (Supabase Auth).
+*   **Gestion de films** :
+    *   Ajouter un film avec titre, genre, résumé, priorité et image (upload).
+    *   Modifier les informations d'un film existant.
+    *   Filtrer les films par titre, genre et priorité.
+*   **Suivi de visionnage** :
+    *   Marquer un film comme "Vu" ✅ (le déplace vers la liste d'historique).
+    *   Consulter l'historique des films vus.
+*   **Interface Responsive** : Design moderne et adapté aux mobiles (Tailwind CSS).
 
-## Expanding the ESLint configuration
+## 📸 Aperçu
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Interface Principale](screenshots/home.png)
+
+## 🛠 Technologies
+
+*   **Frontend** : [React 19](https://react.dev/), [Vite](https://vitejs.dev/)
+*   **Styling** : [Tailwind CSS 4](https://tailwindcss.com/)
+*   **Backend & Base de données** : [Supabase](https://supabase.com/) (PostgreSQL)
+*   **Routing** : React Router DOM
+*   **Formulaires** : Formik, Yup (validation)
+
+## 🚀 Installation et Démarrage
+
+### Prérequis
+
+*   Node.js (v18+)
+*   Compte Supabase
+
+### Étapes
+
+1.  **Cloner le dépôt**
+    ```bash
+    git clone https://github.com/votre-user/watchlist.git
+    cd watchlist
+    ```
+
+2.  **Installer les dépendances**
+    ```bash
+    npm install
+    ```
+
+3.  **Configuration d'environnement**
+    Créez un fichier `.env` à la racine du projet et ajoutez vos clés Supabase :
+
+    ```env
+    VITE_SUPABASE_URL=votre_url_supabase
+    VITE_SUPABASE_ANON_KEY=votre_cle_anon_publique
+    ```
+
+4.  **Lancer le serveur de développement**
+    ```bash
+    npm run dev
+    ```
+
+    L'application sera accessible sur `http://localhost:5173`.
+
+## 📦 Structure de la Base de Données (Supabase)
+
+Le projet utilise deux tables principales :
+
+*   `films` : Liste des films à voir.
+*   `filmsvu` : Historique des films vus.
+*   Bucket Storage `films-poster` : Pour stocker les affiches de films.
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.
