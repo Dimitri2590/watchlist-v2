@@ -17,6 +17,9 @@ Application moderne de gestion de liste de films ("To Watch List") construite av
 ## 📸 Aperçu
 
 ![Interface Principale](screenshots/home.png)
+![Interface de modification](screenshots/modification.png)
+![Interface des films vus](screenshots/vu.png)
+![Interface version mobile](screenshots/mobile.png)
 
 ## 🛠 Technologies
 
