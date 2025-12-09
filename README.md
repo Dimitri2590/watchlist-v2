@@ -72,6 +72,3 @@ Le projet utilise deux tables principales :
 *   `filmsvu` : Historique des films vus.
 *   Bucket Storage `films-poster` : Pour stocker les affiches de films.
 
-## 📄 Licence
-
-Ce projet est sous licence MIT.
