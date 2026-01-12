@@ -28,6 +28,7 @@ Application moderne de gestion de liste de films ("To Watch List") construite av
 *   **Backend & Base de données** : [Supabase](https://supabase.com/) (PostgreSQL)
 *   **Routing** : React Router DOM
 *   **Formulaires** : Formik, Yup (validation)
+*   **Déploiement** : Vercel
 
 ## 🚀 Installation et Démarrage
 
