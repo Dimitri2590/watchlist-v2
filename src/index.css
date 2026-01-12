@@ -40,3 +40,13 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
+
+/* ✅ Fix Tailwind preflight qui casse Leaflet (tiles en carrés / blancs) */
+.leaflet-container img {
+  max-width: none !important;
+}
+
+.leaflet-container .leaflet-marker-icon,
+.leaflet-container .leaflet-marker-shadow {
+  max-width: none !important;
+}

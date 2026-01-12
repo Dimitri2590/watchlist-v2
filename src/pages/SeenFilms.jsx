@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { supabase } from './supabaseClient'
-import FilmCard from './FilmCard'
+import { supabase } from '../lib/supabaseClient'
+import FilmCard from '../components/FilmCard'
 
 export default function FilmValide() {
     const [filmsvu, setFilmsvu] = useState([])

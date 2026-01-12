@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from './supabaseClient'
+import { supabase } from '../lib/supabaseClient'
 import FilmCard from './FilmCard'
 
 export default function FilmList({ refresh }) {
@@ -26,7 +26,7 @@ export default function FilmList({ refresh }) {
 
   const handleValidate = async (id) => {
     try {
-      // 1. Récupérer le film
+      //Récupérer le film
       const { data: film, error: fetchError } = await supabase
         .from('films')
         .select('*')
@@ -35,17 +35,17 @@ export default function FilmList({ refresh }) {
 
       if (fetchError) throw fetchError;
 
-      // 2. Préparer les données (on retire l'ID et la date de création pour laisser la nouvelle table les gérer)
+      //Préparer les données (on retire l'ID et la date de création pour laisser la nouvelle table les gérer)
       const { id: oldId, created_at, ...filmData } = film;
 
-      // 3. Insérer dans 'filmsvu'
+      //Insérer dans la table 'filmsvu'
       const { error: insertError } = await supabase
         .from('filmsvu')
         .insert([filmData]);
 
       if (insertError) throw insertError;
 
-      // 4. Supprimer de 'films'
+      //Supprimer l'élément de la table 'films'
       const { error: deleteError } = await supabase
         .from('films')
         .delete()
@@ -54,7 +54,7 @@ export default function FilmList({ refresh }) {
       if (deleteError) {
         alert("Le film a été copié dans 'Vus' mais impossible de le supprimer de cette liste : " + deleteError.message);
       } else {
-        // 5. Mise à jour de l'interface
+        //Mise à jour de l'interface
         setFilms(films.filter(f => f.id !== id));
       }
     } catch (error) {

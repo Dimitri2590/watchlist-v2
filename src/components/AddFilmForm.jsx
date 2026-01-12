@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { supabase } from './supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 import { useState } from "react";
 
 const validationSchema = Yup.object().shape({
